@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: monitoring
+  labels:
+    k8s-app: monitoring
+spec:
+  selector:
+    matchLabels:
+      k8s-app: monitoring
+  template:
+    metadata:
+      labels:
+        k8s-app: monitoring
+    spec:
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+      containers:
+      - name: fluent-pod
+        image: quay.io/fluentd_elasticsearch/fluentd:v4.5.2
